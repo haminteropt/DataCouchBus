@@ -21,7 +21,6 @@ namespace DataCouchDBBus
             var res = couch.getCouchDbVer();
             int httpPort = IpPorts.TcpPort;
             url = string.Format("http://*:{0}", httpPort);
-            Console.WriteLine("http port: {0}", url);
             CreateWebHostBuilder(args).Build().Run();
         }
 
