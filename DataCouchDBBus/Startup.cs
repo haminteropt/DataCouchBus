@@ -52,7 +52,9 @@ namespace DataCouchDBBus
             }
 
             app.UseMvc();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
+
         }
     }
 }
