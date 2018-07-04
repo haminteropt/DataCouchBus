@@ -17,6 +17,8 @@ namespace DataCouchDBBus
         private static string url { get; set; }
         public static void Main(string[] args)
         {
+            var reportingThread = ReportingThread.GetInstance();
+            reportingThread.StartInfoThread();
             var couch = new CouchDbRest();
             var res = couch.getCouchDbVer();
             int httpPort = IpPorts.TcpPort;
