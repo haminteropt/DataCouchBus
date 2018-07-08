@@ -48,6 +48,7 @@ namespace DataCouchDBBus
             dataBusDesc.MaxVersion = 1;
             dataBusDesc.Host = hostName;
             dataBusDesc.Name = "CouchDB DataBus";
+            dataBusDesc.Description = "DataBus for CouchDB";
 
             // Get the IP  
             string myIP = Dns.GetHostEntry(hostName).AddressList[0].ToString();
