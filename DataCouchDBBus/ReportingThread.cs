@@ -1,4 +1,6 @@
 ﻿using HamBusLib;
+using HamBusLib.Models;
+using HamBusLib.Packets;
 using HamBusLib.UdpNetwork;
 using Newtonsoft.Json;
 using System;
@@ -20,7 +22,7 @@ namespace DataCouchDBBus
 
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public DataBusInfo dataBusDesc = DataBusInfo.Instance;
+        public DataBusInfo dataBusDesc = new DataBusInfo();
         public static ReportingThread GetInstance()
         {
             if (Instance == null)
@@ -36,12 +38,11 @@ namespace DataCouchDBBus
         public void StartInfoThread()
         {
             var udpServer = UdpServer.GetInstance();
-            dataBusDesc = DataBusInfo.Instance;
             var hostName = Dns.GetHostName(); // Retrive the Name of HOST  
 
             dataBusDesc.Command = "update";
-            dataBusDesc.DocType = "DataBus";
             dataBusDesc.Id = Id;
+            dataBusDesc.DocType = DocTypes.DataBusInfo;
             dataBusDesc.UdpPort = udpServer.listenUdpPort;
             dataBusDesc.TcpPort = udpServer.listenTcpPort;
             dataBusDesc.MinVersion = 1;
@@ -58,13 +59,33 @@ namespace DataCouchDBBus
         }
         public void SendRigBusInfo()
         {
+            //https://stackoverflow.com/questions/2281441/can-i-set-the-timeout-for-udpclient-in-c
+            int count = 0;
+            var timeToWait = TimeSpan.FromSeconds(10);
+            var ServerEp = new IPEndPoint(IPAddress.Any, 0);
+            DirGreetingList dirList = DirGreetingList.Instance;
+            udpClient.EnableBroadcast = true;
+            udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 3000);
             while (true)
             {
-                dataBusDesc.Time = DateTimeUtils.ConvertToUnixTime(DateTime.Now);
-                udpClient.Connect("255.255.255.255", Constants.DirPortUdp);
-                Byte[] senddata = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dataBusDesc));
-                udpClient.Send(senddata, senddata.Length);
-                Thread.Sleep(3000);
+                try
+                {
+                    dataBusDesc.Time = DateTimeUtils.ConvertToUnixTime(DateTime.Now);
+                    Byte[] senddata = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(dataBusDesc));
+
+
+                    udpClient.Send(senddata, senddata.Length, new IPEndPoint(IPAddress.Broadcast, 7300));
+                    Console.WriteLine("Sending Data {0}",count++);
+                    var ServerResponseData = udpClient.Receive(ref ServerEp);
+                    var ServerResponse = Encoding.ASCII.GetString(ServerResponseData);
+                    var dirService = DirectoryBusGreeting.ParseCommand(ServerResponse);
+                    DirGreetingList.Instance.Add(dirService);
+                    Thread.Sleep(3000);
+                } catch(Exception e)
+                {
+                    Console.WriteLine("Exception: {0}", e.Message);
+                    //infoThread.Abort();
+                }
             }
         }
     }

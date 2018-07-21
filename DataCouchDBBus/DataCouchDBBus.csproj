@@ -10,13 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
-    <PackageReference Include="Newtonsoft.json" Version="11.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.5.0" />
+    <Compile Remove="ngCouchBus\**" />
+    <Content Remove="ngCouchBus\**" />
+    <EmbeddedResource Remove="ngCouchBus\**" />
+    <None Remove="ngCouchBus\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.json" Version="11.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\hambuslib\CouchDB\CouchDB.csproj" />
     <ProjectReference Include="..\..\hambuslib\HamBusLib\HamBusLib.csproj" />
   </ItemGroup>
 
