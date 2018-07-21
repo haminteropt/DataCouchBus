@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CouchDB;
+using CouchDB.Model;
 using DataCouchDBBus.CouchDB;
 using HamBusLib;
 using HamBusLib.CouchDB;
