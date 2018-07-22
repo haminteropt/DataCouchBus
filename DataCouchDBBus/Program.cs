@@ -20,32 +20,18 @@ namespace DataCouchDBBus
         private static string url { get; set; }
         public static void Main(string[] args)
         {
-            CouchDBConnect();
+            var manager = new CouchManager();
+            manager.CouchDBConnect();
 
             var reportingThread = ReportingThread.GetInstance();
             reportingThread.StartInfoThread();
-            var couch = new CouchDbRest();
-            var res = couch.getCouchDbVer();
+
             int httpPort = IpPorts.TcpPort;
             url = string.Format("http://*:{0}", httpPort);
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        private static void CouchDBConnect()
-        {
 
-            var cred = new Credentials()
-            {
-                Username = "apiadmin",
-                Password = "secret"
-            };
-            CouchDBClient couchClient = new CouchDBClient();
-            couchClient.Auth(cred);
-            Console.WriteLine("Auth cookie: {0}", couchClient.AuthCookie);
-            couchClient.GetAllDataBases<string>();
-
-
-        }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
