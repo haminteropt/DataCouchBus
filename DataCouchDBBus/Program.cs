@@ -20,6 +20,7 @@ namespace DataCouchDBBus
         private static string url { get; set; }
         public static void Main(string[] args)
         {
+
             var manager = new CouchManager();
             manager.CouchDBConnect();
 
