@@ -30,12 +30,22 @@ namespace DataCouchDBBus
             int httpPort = IpPorts.TcpPort;
             url = string.Format("http://*:{0}", httpPort);
             CreateWebHostBuilder(args).Build().Run();
+            Console.ReadKey();
         }
-
-
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>().UseUrls(url);
+            .ConfigureAppConfiguration(SetupConfiguration)
+            .UseUrls(url)
+            .UseStartup<Startup>();
+
+        private static void SetupConfiguration(WebHostBuilderContext wbCtx, IConfigurationBuilder builder)
+        {
+            builder.Sources.Clear();
+            builder.AddJsonFile("config.json", false, true)
+                   .AddEnvironmentVariables();
+
+        }
+
     }
 }

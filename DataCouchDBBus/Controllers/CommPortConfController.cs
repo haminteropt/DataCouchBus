@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HamBusLib.Models.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DataCouchDBBus.Controllers
 {
@@ -12,9 +13,15 @@ namespace DataCouchDBBus.Controllers
     [ApiController]
     public class CommPortConfController : ControllerBase
     {
+        private readonly ILogger logger;
+        public CommPortConfController(ILogger<CommPortConfController> logger)
+        {
+            this.logger = logger;
+        }
         [HttpGet]
         public ActionResult<IEnumerable<CommPortConf>> Get()
         {
+            logger.LogInformation("GET comm config");
             var list = new List<CommPortConf>();
             var comConf = new CommPortConf();
             comConf.BaudRate = 57600;
@@ -25,6 +32,7 @@ namespace DataCouchDBBus.Controllers
             comConf.StopBits = "One";
             comConf.ReadTimeout = 5000;
             comConf.WriteTimeout = 500;
+            list.Add(comConf);
             return list;
         }
     }
