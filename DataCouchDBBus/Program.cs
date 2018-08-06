@@ -44,8 +44,19 @@ namespace DataCouchDBBus
             builder.Sources.Clear();
             builder.AddJsonFile("config.json", false, true)
                    .AddEnvironmentVariables();
-
+            var configuration = builder.Build();
+            addConfigurationValues(configuration);
+            Console.WriteLine();
         }
 
+        private static void addConfigurationValues(IConfigurationRoot configuration)
+        {
+            HamBusEnv.ConfigPairs["ConnectionStrings"] = configuration["ConnectionStrings"];
+            HamBusEnv.ConfigPairs["Password"] = configuration["CouchDB:Password"];
+            HamBusEnv.ConfigPairs["Username"] = configuration["CouchDB:Username"];
+            HamBusEnv.ConfigPairs["CouchDB"] = configuration["CouchDB"];
+            HamBusEnv.ConfigPairs["Url"] = configuration["CouchDB:Url"];
+
+        }
     }
 }

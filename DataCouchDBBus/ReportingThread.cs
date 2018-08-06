@@ -2,6 +2,7 @@
 using HamBusLib.Models;
 using HamBusLib.Packets;
 using HamBusLib.UdpNetwork;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -81,9 +82,15 @@ namespace DataCouchDBBus
                     var dirService = DirectoryBusGreeting.ParseCommand(ServerResponse);
                     DirGreetingList.Instance.Add(dirService);
                     Thread.Sleep(3000);
-                } catch(Exception e)
+                }
+                catch (SocketException se)
                 {
-                    Console.WriteLine("Exception: {0}", e.Message);
+                    HamBusEnv.Logger.LogInformation($"Socket Error!  Maybe Directory Bus isn't running.\n {se.Message}");
+                }
+                catch (Exception e)
+                {
+                    HamBusEnv.Logger.LogInformation($"socket {e.Message}");
+                   // Console.WriteLine("Exception: {0}", e.Message);
                     //infoThread.Abort();
                 }
             }

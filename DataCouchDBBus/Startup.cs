@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HamBusLib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,8 @@ namespace DataCouchDBBus
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
+            HamBusEnv.loggerFactor = loggerFactory;
+            HamBusEnv.Logger = loggerFactory.CreateLogger("HamBus.DataBus.Configuration.Store");
         }
     }
 }

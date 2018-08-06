@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using HamBusLib;
+using Microsoft.Extensions.Logging;
 
 namespace DataCouchDBBus.CouchDB
 {
@@ -22,6 +24,7 @@ namespace DataCouchDBBus.CouchDB
             }
             catch (Exception e)
             {
+                HamBusEnv.Logger.LogInformation($"get DB Version {e.Message}");
                 return null;
             }
 

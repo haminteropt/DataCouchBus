@@ -1,12 +1,15 @@
 ﻿{
+  "ConnectionStrings": {
+  },
+  "CouchDB": {
+    "Password": "secret",
+    "Url": "http://localhost:5984",
+    "Username": "adiadmin"
+  },
   "Logging": {
     "LogLevel": {
       "Default": "Information",
       "Microsoft": "Warning"
     }
-  },
-  "ConnectionStrings": {
-
   }
-
 }
